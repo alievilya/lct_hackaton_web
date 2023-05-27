@@ -35,6 +35,6 @@ COPY /flask_app /flask_app
 
 CMD ["python3.9", "-m", "flask_app"]
 
-#  docker build -t flask_docker:0.1 .
-#  docker run --gpus=all --restart=always --name lct_hack_otso -ti -p 5004:5005 flask_docker:0.1
+#  docker build -t lct_otso_flask .
+#  docker run --gpus=all --restart=always --name lct_hack_otso -ti -p 5004:5005 lct_otso_flask
 #--runtime=gpu

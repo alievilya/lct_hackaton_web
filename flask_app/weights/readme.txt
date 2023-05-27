@@ -1,0 +1,1 @@
+Please place our weights (classify_best.pt, detection_best.pt) in this folder

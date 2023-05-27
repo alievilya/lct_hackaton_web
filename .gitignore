@@ -1,6 +1,7 @@
 **/datasets/
 #datasets/
 /data/images_fromvideo/
+/data/videos/
 /runs/
 # Byte-compiled / optimized / DLL files
 __pycache__/

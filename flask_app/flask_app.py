@@ -30,7 +30,7 @@ def calc_percent_garbage(counter_dict, num_frames_processed):
     n_walls = counter_dict.get('wall 0') + counter_dict.get('wall 1') + counter_dict.get('wall 2')
     if n_walls == 0:
         return 0
-    return min(n_garbage * 10 / n_walls * 100, 100)
+    return round(min(n_garbage * 10 / n_walls * 100, 100))
 
 
 # TODO think about it more
@@ -40,7 +40,7 @@ def calc_percent_kitchen(counter_dict, num_frames_processed):
     n_walls = counter_dict.get('wall 2')
     if n_walls == 0:
         return 0
-    return min(n_kitchen * 10 / n_walls * 100, 100)
+    return round(min(n_kitchen * 10 / n_walls * 100, 100))
 
 
 # TODO
@@ -50,8 +50,7 @@ def calc_percent_doors(counter_dict, num_frames_processed):
     n_walls = counter_dict.get('wall 2')
     if n_walls == 0:
         return 0
-    return min(n_door * 10 / n_walls * 100, 100)
-    pass
+    return round(min(n_door * 10 / n_walls * 100, 100))
 
 
 def calc_elements_percent(needed_element, counter_dict):
@@ -118,7 +117,7 @@ def predict():
     file = request.files['file']
     filename = file.filename
     print(filename)
-
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
