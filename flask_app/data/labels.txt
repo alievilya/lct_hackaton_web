@@ -1,0 +1,20 @@
+bath
+ceil 0
+ceil 1
+door
+floor 0
+floor 1
+floor2
+garbage
+kitchen
+podokonnik 0
+podokonnik 1
+radiator
+shower
+sink
+socket 0
+socket
+toilet
+wall 0
+wall 1
+wall 2
