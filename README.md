@@ -52,6 +52,7 @@ Ubuntu
 ## Demo
 
 Detection example
+
 ![Detection example](https://github.com/alievilya/lct_hackaton_web/blob/main/flask_app/data/git_demo/demo1.gif)
 
 
