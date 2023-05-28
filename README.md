@@ -45,5 +45,5 @@ Ubuntu
 
 ## Demo
 
-![image demo](https://github.com/alievilya/lct_hackaton_web/blob/main/flask_app/data/git_demo/demo1.png?raw=true)
+![image demo](https://github.com/alievilya/lct_hackaton_web/blob/main/flask_app/data/git_demo/demo2.png?raw=true)
 
