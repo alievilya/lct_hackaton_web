@@ -10,7 +10,7 @@
 Макет с веб-интерфейсом доступен по адресу http://otsounitedlct.ru. Вычисления производятся на видеокарте GeForce GTX 1060.
 
 ## Mobile App
-Также было реализовано мобильное приложение, выполняющее обработку в режиме реального времени. Решение находится в репозитории https://github.com/andreibezborodov/lct_hackaton_mobile
+Также было реализовано мобильное приложение, выполняющее обработку в режиме реального времени. Решение находится в репозитории https://github.com/alievilya/lct_hackaton_mobile
 
 apk-файл доступен на диске https://drive.google.com/file/d/1ypbvAIwjVsarYj44d-bseCWpDPXbOjfj/view?usp=sharing
 
@@ -68,4 +68,3 @@ https://docs.google.com/presentation/d/1pdLg4HP2bDWk_S4zBV3a4YkQaFsRRWI6eeVPBZkx
 - [Илья Алиев](https://www.github.com/alievilya)
 - [Андрей Безбородов](https://github.com/andreibezborodov)
 - [Григорий Макаров](https://github.com/grifon-239)
-- 
