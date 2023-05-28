@@ -23,7 +23,7 @@ RUN apt-get install python3.9 -y
 RUN apt-get install python3-pip -y
 RUN python3.9 -m pip install --upgrade pip
 RUN python3.9 -m pip install urllib3
-RUN python3.9 -m pip install torch==1.10.2+cu111 torchvision==0.11.3+cu111 torchaudio==0.10.2 -f https://download.pytorch.org/whl/torch_stable.html
+#RUN python3.9 -m pip install torch==1.10.2+cu111 torchvision==0.11.3+cu111 torchaudio==0.10.2 -f https://download.pytorch.org/whl/torch_stable.html
 #RUN python3.9 -m pip install torch==1.10.2+cu102 torchvision==0.11.3+cu102 torchaudio==0.10.2+cu102 -f https://download.pytorch.org/whl/cu102/torch_stable.html
 RUN python3.9 -m pip install -r requirements.txt
 

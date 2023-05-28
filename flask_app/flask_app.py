@@ -6,6 +6,20 @@ import cv2
 import pandas as pd
 import torch
 from ultralytics import YOLO
+import os
+import sys
+import time
+from videoprops import get_video_properties
+from flask import Flask, render_template, request, send_file, Response
+import json
+import pandas as pd
+
+STATIC_PATH = '/static'
+SAVE_PATH = f".{STATIC_PATH}/saved_data"
+app = Flask(__name__, static_url_path=STATIC_PATH)
+
+app.config['UPLOAD_FOLDER'] = f'{SAVE_PATH}'
+content = {"save_dir": SAVE_PATH}
 
 
 def read_labels2dict(txt_path):
@@ -27,7 +41,7 @@ def create_emptydict(txt_path):
 # TODO think about it more
 def calc_percent_garbage(counter_dict, num_frames_processed):
     n_garbage = counter_dict.get('garbage')
-    n_walls = counter_dict.get('wall 0') + counter_dict.get('wall 1') + counter_dict.get('wall 2')
+    n_walls = counter_dict.get('floor 0') + counter_dict.get('floor 1') + counter_dict.get('floor2')
     if n_walls == 0:
         return 0
     return round(min(n_garbage * 10 / n_walls * 100, 100))
@@ -64,6 +78,8 @@ def calc_elements_percent(needed_element, counter_dict):
 
 def count_items(pred_classes, items_count_dict, label2id_dict):
     classes_to_count = ['bath', 'radiator', 'toilet', 'sink', 'shower']
+    if len(pred_classes) == 0:
+        return items_count_dict
     for class_name_ in classes_to_count:
         cls_id = label2id_dict.get(class_name_)
         if cls_id in pred_classes:
@@ -72,22 +88,6 @@ def count_items(pred_classes, items_count_dict, label2id_dict):
             elif label2id_dict.get('wall 1') in pred_classes or label2id_dict.get('floor 1') in pred_classes:
                 items_count_dict[class_name_] += 0.5
     return items_count_dict
-
-
-import os
-import sys
-import time
-from videoprops import get_video_properties
-from flask import Flask, render_template, request, send_file, Response
-import json
-import pandas as pd
-
-STATIC_PATH = '/static'
-SAVE_PATH = f".{STATIC_PATH}/saved_data"
-app = Flask(__name__, static_url_path=STATIC_PATH)
-
-app.config['UPLOAD_FOLDER'] = f'{SAVE_PATH}'
-content = {"save_dir": SAVE_PATH}
 
 
 @app.route("/")
@@ -102,21 +102,10 @@ def saved_data():
     return "/saved_data/"
 
 
-# @app.route('/progress')
-# def progress():
-#     def generate():
-#         x = 0
-#         while x <= 100:
-#             yield "data:" + str(x) + "\n\n"
-#             x = x + 10
-#             time.sleep(0.5)
-#     return Response(generate(), mimetype='text/event-stream')
-
 @app.route("/predict", methods=["GET", "POST"])
 def predict():
     file = request.files['file']
     filename = file.filename
-    print(filename)
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -126,24 +115,18 @@ def predict():
 
     # Making prediction
     prediction = process_video(file_path)
-    # prediction = 'data/1.mp4.json'
-    # df = pd.read_json(prediction, typ='series')
     df = pd.DataFrame([prediction])
-    # df = pd.DataFrame.from_dict([prediction])
-    # dfs = pd.Series(prediction, name='DateValue')
-    # df = pd.DataFrame(df, columns=['%']).T
     df.columns = ['потолок: без отделки', 'потолок: с отделкой', 'пол: без отделки', 'пол: черновая', 'пол: чистовая',
                   'подоконник: без отделки', 'подоконник: с отделкой', 'нет розетки', 'наличие розеток',
                   'стена: без отделки', 'стена: черновая', 'стена: чистовая',
                   'кухня', 'мусор', 'дверь', 'батарея', 'ванна', 'туалет', 'раковина', 'душ']
-
-    # content['prediction'] = prediction
+    df.index = ['%']
 
     props = get_video_properties(file_path)
     width, height = props['width'], props['height']
 
-    content['width'] = min(640, width)
-    content['height'] = min(480, height)
+    content['width'] = min(480, width)
+    content['height'] = min(360, height)
 
     return render_template('index.html', content=content, tables=[df.to_html()], titles=[''])
 
@@ -156,6 +139,7 @@ def load_models():
     model_cls.predict('data/init_image.jpg')
     print('Models are loaded')
     return model, model_cls
+
 
 def process_video(video_path):
     n_seconds_timeout = 1
@@ -191,7 +175,6 @@ def process_video(video_path):
             num_frames_processed += 1
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             fm = cv2.Laplacian(gray, cv2.CV_64F, ksize=3).var()
-            print(fm)
             if (fm > 500) and (count_frames == 0):
                 count_frames = num_timeout_frames
                 # Run YOLOv8 inference on the frame
@@ -210,7 +193,7 @@ def process_video(video_path):
 
                 # Visualize the results on the frame
                 # annotated_frame = results[0].plot()
-                # cv2.imshow("YOLOv8 Inference", annotated_frame)
+                # cv2.imwrite(f"{num_frames_processed}.jpg", frame)
                 # if cv2.waitKey(1) & 0xFF == ord("q"):
                 #     break
         else:
@@ -228,6 +211,10 @@ def process_video(video_path):
         res_percent = calc_elements_percent(item, res_dict)
         res_percents[item] = res_percent
 
+    if res_percents['podokonnik 1'] == 0 and res_percents['podokonnik 0'] == 0:
+        res_percents['podokonnik 0'] = 100
+    if res_percents['socket'] == 0 and res_percents['socket 0'] == 0:
+        res_percents['socket 0'] = 100
     res_percents['kitchen'] = calc_percent_kitchen(res_dict, num_frames_processed)
     res_percents['garbage'] = calc_percent_garbage(res_dict, num_frames_processed)
     res_percents['door'] = calc_percent_doors(res_dict, num_frames_processed)
