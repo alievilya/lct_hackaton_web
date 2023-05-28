@@ -63,6 +63,9 @@ Detection example
 ## Ссылка на презентацию с описанием проекта
 https://docs.google.com/presentation/d/1pdLg4HP2bDWk_S4zBV3a4YkQaFsRRWI6eeVPBZkxnNY/edit?usp=sharing
 
+## Ссылка на документацию
+https://drive.google.com/file/d/1u-Y_ANHE_rRlAo_pOa1mCG7oWRq5hX8Y/view?usp=sharing
+
 ## Authors
 
 - [Илья Алиев](https://www.github.com/alievilya)
