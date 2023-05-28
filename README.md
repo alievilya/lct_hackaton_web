@@ -12,7 +12,7 @@
 ## Mobile App
 Также было реализовано мобильное приложение, выполняющее обработку в режиме реального времени. Решение находится в репозитории https://github.com/andreibezborodov/lct_hackaton_mobile
 
-apk-файл доступен на диске https://drive.google.com/file/d/18fiqRJZYj2R-Q7yk6uYyn8Ln4F0hD1R7/view?usp=sharing
+apk-файл доступен на диске https://drive.google.com/file/d/1ypbvAIwjVsarYj44d-bseCWpDPXbOjfj/view?usp=sharing
 
 ## Deployment web using Docker
 
