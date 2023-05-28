@@ -142,7 +142,7 @@ def load_models():
 
 
 def process_video(video_path):
-    n_seconds_timeout = 1
+    n_seconds_timeout = 0.5
     # video_name = "1.mp4"
     # video_dir = "data/videos/"
     # video_path = os.path.join(video_dir, video_name)
